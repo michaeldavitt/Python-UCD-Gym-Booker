@@ -55,14 +55,14 @@ class GymBooker():
         # Counter for keeping track of attempts
         attempts = 0
 
+        # xpath used to isolate the booking link
+        xpath = f"//tr/td/table/tbody/tr[./td[text()=\"{self.__booking_time}\"]][1]/td[6]/a"
+
         # Infinite while loop which will continue trying to book until a booking link appears
         while True:
             attempts += 1
 
             try: 
-                # xpath used to isolate the booking link
-                xpath = f"//tr/td/table/tbody/tr[./td[text()=\"{self.__booking_time}\"]][1]/td[6]/a"
-
                 # Click booking link and exit while loop
                 booking_link = self.__driver.find_element_by_xpath(xpath)
                 booking_link.click()
@@ -70,18 +70,25 @@ class GymBooker():
 
             except NoSuchElementException:
                 # Refresh the page if the booking link isn't up yet and try again
-                print(f"Booking link is not available yet. Will try again in 10 seconds. Attempt: {attempts}")
-                if attempts > 10:
+                print(f"Booking link is not available yet. Will try again in 3 seconds. Attempt: {attempts}")
+                if attempts > 50:
                     print("Giving up...")
                     self.quit()
                 
                 self.__driver.refresh()
-                self.__sleep(10)
+                self.__sleep()
 
             except ElementNotInteractableException:
                 # If this exception is triggered, this implies that the bookings are full, so the program prompts the user for another booking time
-                print("Booking Full. No more slots available")
-                self.__booking_time = get_booking_time()
+
+                # First, try to change gym to see if the other gym is free at the same time. 
+                if xpath == f"//tr/td/table/tbody/tr[./td[text()=\"{self.__booking_time}\"]][1]/td[6]/a":
+                    xpath = f"//tr/td/table/tbody/tr[./td[text()=\"{self.__booking_time}\"]][2]/td[6]/a"
+                
+                # If the other gym is also full, quit the program
+                else:
+                    print("Booking Full. No more slots available")
+                    self.__booking_time = get_booking_time()
 
         self.__sleep()
 
