@@ -1,10 +1,11 @@
 # Import selenium and time modules 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import ElementNotInteractableException, NoSuchElementException
 import time
 import sys
+
+# Global Variables
 
 # PATH for the chrome webdriver
 PATH = "C:\Program Files (x86)\chromedriver.exe"
@@ -56,6 +57,8 @@ class GymBooker():
 
         # Infinite while loop which will continue trying to book until a booking link appears
         while True:
+            attempts += 1
+
             try: 
                 # xpath used to isolate the booking link
                 xpath = f"//tr/td/table/tbody/tr[./td[text()=\"{self.__booking_time}\"]][1]/td[6]/a"
@@ -67,7 +70,6 @@ class GymBooker():
 
             except NoSuchElementException:
                 # Refresh the page if the booking link isn't up yet and try again
-                attempts += 1
                 print(f"Booking link is not available yet. Will try again in 1 minute. Attempt: {attempts}")
                 if attempts > 10:
                     print("Giving up...")
@@ -94,8 +96,12 @@ class GymBooker():
 
     def enter_student_number(self):
         """Method for entering your student number into the booking system"""
+        attempts = 0
 
         while True:
+            attempts += 1
+            
+            # Enter student number
             student_num_input = self.__driver.find_element_by_name("MEMBER_NO")
             student_num_input.send_keys(self.__student_num)
             student_num_input.send_keys(Keys.RETURN)
@@ -107,7 +113,12 @@ class GymBooker():
 
                 # Get a new student number if the error text appears
                 if error_text:
-                    print("Invalid Student Number")
+                    print("Invalid Student Number. Attempts: {attempts}")
+
+                    if attempts > 10:
+                        print("Giving Up...")
+                        self.quit()
+
                     self.__student_num = get_student_num()
 
             except NoSuchElementException:
@@ -136,9 +147,13 @@ class GymBooker():
 # Functions for obtaining the required arguments for the GymBooker class
 
 def get_student_num():
+    attempts = 0
+
     while True:
+        attempts += 1
+
         try:
-            # Promtp the user for a student number
+            # Prompt the user for a student number
             student_num = input("Please enter your student number: ")
 
             # Try convert the student number to an integer to see if it is valid
@@ -147,7 +162,10 @@ def get_student_num():
 
         except ValueError:
             # If this exception is raised, the user will be prompted for another student number
-            print("Invalid Student Number")
+            print(f"Invalid Student Number. Attempts: {attempts}")
+            if attempts > 10:
+                sys.exit()
+
             continue
 
         break
