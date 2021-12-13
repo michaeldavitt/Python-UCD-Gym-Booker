@@ -70,13 +70,13 @@ class GymBooker():
 
             except NoSuchElementException:
                 # Refresh the page if the booking link isn't up yet and try again
-                print(f"Booking link is not available yet. Will try again in 1 minute. Attempt: {attempts}")
+                print(f"Booking link is not available yet. Will try again in 10 seconds. Attempt: {attempts}")
                 if attempts > 10:
                     print("Giving up...")
                     self.quit()
                 
                 self.__driver.refresh()
-                self.__sleep(60)
+                self.__sleep(10)
 
             except ElementNotInteractableException:
                 # If this exception is triggered, this implies that the bookings are full, so the program prompts the user for another booking time
@@ -147,6 +147,10 @@ class GymBooker():
 # Functions for obtaining the required arguments for the GymBooker class
 
 def get_student_num():
+    """Function requests user for a valid student number and returns the output
+    
+    Valid in this context means that the student number is an integer
+    """
     attempts = 0
 
     while True:
@@ -163,7 +167,10 @@ def get_student_num():
         except ValueError:
             # If this exception is raised, the user will be prompted for another student number
             print(f"Invalid Student Number. Attempts: {attempts}")
+
+            # The system eventually gives up if the user does not submit a valid student number
             if attempts > 10:
+                print("Giving up...")
                 sys.exit()
 
             continue
@@ -195,7 +202,7 @@ def get_booking_time():
 
 
 if __name__ == "__main__":
-    # Get thestudent number of the gym booker
+    # Get the student number and desired booking time for the GymBooker class
     student_num = get_student_num()
     show_booking_times()
     booking_time = get_booking_time()
