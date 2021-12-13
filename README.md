@@ -4,7 +4,7 @@ Credit to Clarence White for the original concept (https://github.com/ClarenceWh
 
 
 ## Important
-This program was operational on the 13th December 2021. It is possible that UCD's gym booking site has been updated since then, which may cause unexpected errors in the program.
+This program was operational on the 13th December 2021. It is possible that UCD's gym booking site has been updated since then, which may cause unexpected errors in the program. In order for this program to work, the user must install the selenium package via pip. 
 
 
 ## Description
