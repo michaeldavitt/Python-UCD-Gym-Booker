@@ -85,9 +85,9 @@ class GymBooker():
                 if xpath == f"//tr/td/table/tbody/tr[./td[text()=\"{self.__booking_time}\"]][1]/td[6]/a":
                     xpath = f"//tr/td/table/tbody/tr[./td[text()=\"{self.__booking_time}\"]][2]/td[6]/a"
                 
-                # If the other gym is also full, quit the program
+                # If the other gym is also full, prompt the user for a new booking time
                 else:
-                    print("Booking Full. No more slots available")
+                    print(f"No more slots available at {self.__booking_time}")
                     self.__booking_time = get_booking_time()
 
         self.__sleep()
