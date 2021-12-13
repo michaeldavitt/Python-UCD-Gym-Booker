@@ -1,4 +1,4 @@
-# Python-UCD-Gym-Booker
+# Python UCD Gym Booking Program
 
 Credit to Clarence White for the original concept (https://github.com/ClarenceWhite/Gym-Booking)
 
