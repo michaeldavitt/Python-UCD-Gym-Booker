@@ -120,7 +120,7 @@ class GymBooker():
 
                 # Get a new student number if the error text appears
                 if error_text:
-                    print("Invalid Student Number. Attempts: {attempts}")
+                    print(f"Invalid Student Number. Attempts: {attempts}")
 
                     if attempts > 10:
                         print("Giving Up...")
